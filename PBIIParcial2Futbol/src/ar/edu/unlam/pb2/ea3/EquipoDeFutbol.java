@@ -10,36 +10,74 @@ import java.util.TreeSet;
 
 public class EquipoDeFutbol {
 
+	private String nombre;
+	private TreeSet<Jugador> jugadores;
+	private final Integer CAPACIDAD_MAXIMA = 23;
+
+	public EquipoDeFutbol(String nombre) {
+		// TODO Auto-generated constructor stub
+		this.nombre=nombre;
+		this.jugadores = new TreeSet<>();
+	}
+
 	/*
-	 * La capacidad máxima de un equipo es 23. Cualquier intento de agregar más
-	 * jugadores generará una excepción (CapacidadMaximaException). Además, no
-	 * deberá permitir duplicar Jugadores (JugadorDuplicadoException).
+	 * La capacidad mï¿½xima de un equipo es 23. Cualquier intento de agregar mï¿½s
+	 * jugadores generarï¿½ una excepciï¿½n (CapacidadMaximaException). Ademï¿½s, no
+	 * deberï¿½ permitir duplicar Jugadores (JugadorDuplicadoException).
 	 */
 	public void agregarJugador(Jugador jugador) throws CapacidadMaximaException, JugadorDuplicadoException {
+		
+		if(cantidadDeJugadores()>=CAPACIDAD_MAXIMA)
+			throw new CapacidadMaximaException();
+			
+		if(!this.jugadores.add(jugador)) 
+			throw new JugadorDuplicadoException();
+	}
 
+	private Integer cantidadDeJugadores() {
+		return this.jugadores.size();
 	}
 
 	/*
 	 * Permite cambiar cualquier jugador. Un intento de cambiar un jugador no
-	 * presente en el equipo generará una excepción
+	 * presente en el equipo generarï¿½ una excepciï¿½n
 	 * (JugadoreInexistenteException).
 	 */
 	public Boolean cambiarJugador(Jugador saliente, Jugador entrante) throws JugadoreInexistenteException{
+		if(!this.jugadores.contains(saliente))
+			throw new JugadoreInexistenteException();
 		
-		return false;
+		this.jugadores.remove(saliente);
+		
+		return this.jugadores.add(entrante);
 	}
 
-	public TreeSet<Jugador> devolverPlanteOrdenadoPorNombreDeJugador() {
-		
-		return null;
-	}
+	
+
+//	public TreeSet<Jugador> devolverPlanteOrdenadoPorNombreDeJugador() {
+//		
+//		return null;
+//	}
 
 	public TreeSet<Jugador> devolverPlanteOrdenadoPorPrecioDeCompraDeJugador() {
-		return null;
+		
+		TreeSet<Jugador> jugOrd = new TreeSet<>(new OrdenPorPrecioDeCompra());
+		jugOrd.addAll(this.jugadores);
+		
+		return jugOrd;
 	}
 
 	public TreeSet<Jugador> devolverPlanteOrdenadoPorNumeroDeCamisetaDeJugador() {
-		return null;
+		TreeSet<Jugador> jugOrd = new TreeSet<>(new OrdenPorNumeroDeCamiseta());
+		jugOrd.addAll(this.jugadores);
+		
+		return jugOrd;
 	}
+
+	public TreeSet<Jugador> getJugadores() {
+		return jugadores;
+	}
+
+	
 
 }
